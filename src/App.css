@@ -1,0 +1,8 @@
+.app {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.app--visible {
+  opacity: 1;
+}
