@@ -1,0 +1,198 @@
+/* =============================================
+   PROJECTS PAGE
+   ============================================= */
+
+.projects-page {
+  min-height: 100vh;
+  background: #03020f;
+}
+
+/* ── Nav ── */
+.pp-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px;
+  background: rgba(3,2,15,0.8);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.pp-nav__back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.pp-nav__back:hover {
+  background: rgba(108,99,255,0.12);
+  border-color: rgba(108,99,255,0.5);
+  color: #6c63ff;
+}
+
+.pp-nav__logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.pp-nav__bracket {
+  color: #6c63ff;
+  font-size: 0.9em;
+}
+
+.pp-nav__gh {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.pp-nav__gh:hover { color: #fff; }
+
+/* ── Hero ── */
+.pp-hero {
+  position: relative;
+  height: 60vh;
+  min-height: 420px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  padding-top: 64px;
+}
+
+.pp-hero__model {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.pp-hero__model iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  transform: scale(1.1) translateX(20%);
+}
+
+.pp-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right, rgba(3,2,15,0.95) 0%, rgba(3,2,15,0.6) 50%, rgba(3,2,15,0.2) 100%),
+    linear-gradient(to top, rgba(3,2,15,1) 0%, transparent 60%);
+}
+
+.pp-hero__overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(108, 99, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(108, 99, 255, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-position: center bottom;
+  transform: perspective(500px) rotateX(60deg) translateY(100px) scale(3);
+  opacity: 0.5;
+  animation: gridMove 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes gridMove {
+  0% { transform: perspective(500px) rotateX(60deg) translateY(0) scale(3); }
+  100% { transform: perspective(500px) rotateX(60deg) translateY(50px) scale(3); }
+}
+
+.pp-hero__content {
+  position: relative;
+  z-index: 2;
+  padding: 40px;
+  margin: 0 60px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 600px;
+  background: rgba(10, 10, 25, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-left: 3px solid #6c63ff;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 0 20px rgba(108, 99, 255, 0.1);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+}
+
+.pp-hero__content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.6), inset 0 0 30px rgba(108, 99, 255, 0.2);
+  border-left-color: #38bdf8;
+}
+
+.pp-hero__tag {
+  font-family: 'Courier New', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  color: rgba(56,189,248,0.9);
+  text-shadow: 0 0 10px rgba(56,189,248,0.5);
+}
+
+.pp-hero__content h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(3rem, 6vw, 6rem);
+  font-weight: 900;
+  line-height: 1;
+  margin: 0;
+  color: #fff;
+  letter-spacing: -0.03em;
+  text-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.pp-hero__content p {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.6);
+  max-width: 420px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.pp-hero__scan {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #6c63ff, #38bdf8, #6c63ff, transparent);
+  background-size: 200% 100%;
+  animation: scanlight 3s linear infinite;
+  opacity: 0.8;
+  box-shadow: 0 -5px 20px rgba(56,189,248,0.5);
+}
+
+@keyframes scanlight {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ── Grid section ── */
+.pp-grid-section {
+  padding: 60px 0 80px;
+}

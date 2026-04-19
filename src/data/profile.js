@@ -25,7 +25,7 @@ export const profile = {
     github: 'https://github.com/masterharry9889',
     linkedin: 'https://www.linkedin.com/in/aniket-verma-2034a3294/',
     twitter: 'https://x.com/HniketVerm1408',
-    instagram: 'https://www.instagram.com/', // Update with your Instagram handle
+    instagram: 'https://www.instagram.com/tanoshi_harsh', // Update with your Instagram handle
     email: 'mailto:aniketverma@gmail.com', // Update with your Gmail
   },
 

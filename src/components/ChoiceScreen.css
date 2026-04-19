@@ -1,0 +1,472 @@
+/* ====================================================
+   CHOICE SCREEN — Full-viewport split panel experience
+   ==================================================== */
+
+/* Base */
+.choice-screen {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  overflow: hidden;
+  animation: cs-enter 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cs-enter {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Floating particles ─────────────────────────── */
+.choice-screen__particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.choice-screen__particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  left: calc(var(--i) * 4.2%);
+  top: calc(var(--i) * 3.8%);
+  animation: particle-float calc(6s + var(--i) * 0.4s) ease-in-out infinite alternate;
+  animation-delay: calc(var(--i) * 0.3s);
+}
+
+@keyframes particle-float {
+  0%   { transform: translateY(0) scale(1);   opacity: 0.2; }
+  100% { transform: translateY(-60px) scale(2); opacity: 0.6; }
+}
+
+/* ── Header ─────────────────────────────────────── */
+.choice-screen__header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 28px 48px;
+  animation: cs-slide-down 0.8s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cs-slide-down {
+  from { opacity: 0; transform: translateY(-24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.choice-screen__header-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+
+.choice-screen__header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(0.9rem, 2vw, 1.3rem);
+  font-weight: 800;
+  letter-spacing: 0.35em;
+  color: #fff;
+  margin: 0;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.choice-screen__header p {
+  font-family: 'Courier New', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.35em;
+  color: rgba(255,255,255,0.25);
+  margin: 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── Split Panels container ─────────────────────── */
+.choice-panels {
+  position: relative;
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  z-index: 5;
+  animation: cs-rise 1s 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cs-rise {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Individual panel ───────────────────────────── */
+.choice-panel {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    flex 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.6s ease;
+}
+
+/* On hover, give this panel a tiny bit more space */
+.choice-panel:hover {
+  flex: 1.12;
+}
+
+/* Selected panel: explode to full width */
+.choice-panel--expand {
+  flex: 20 !important;
+  transition: flex 1s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Other panel: collapse to zero */
+.choice-panel--shrink {
+  flex: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+  transition: flex 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease !important;
+}
+
+/* ── Iframe ─────────────────────────────────────── */
+.choice-panel__model {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.choice-panel:hover .choice-panel__model {
+  pointer-events: auto;
+}
+
+.choice-panel__model iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  transform: scale(1.05);
+  transition: transform 0.6s ease;
+}
+
+.choice-panel:hover .choice-panel__model iframe {
+  transform: scale(1);
+}
+
+/* ── Dark overlay on each panel ─────────────────── */
+.choice-panel__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.choice-panel__overlay--left {
+  background:
+    linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, transparent 100%),
+    linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+}
+
+.choice-panel:hover .choice-panel__overlay--left {
+  opacity: 0.7;
+}
+
+.choice-panel__overlay--right {
+  background:
+    linear-gradient(to left, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 60%, transparent 100%),
+    linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+}
+
+.choice-panel:hover .choice-panel__overlay--right {
+  opacity: 0.7;
+}
+
+/* ── Glowing edge on the divider side ───────────── */
+.choice-panel__edge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(108,99,255,0.5) 40%, rgba(56,189,248,0.4) 60%, transparent);
+  z-index: 6;
+  pointer-events: none;
+}
+
+.choice-panel__edge--right {
+  left: 0;
+  right: auto;
+}
+
+/* ── Sweep glow on hover ────────────────────────── */
+.choice-panel__sweep {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 80%, rgba(108,99,255,0.12) 0%, transparent 70%);
+  opacity: 0;
+  z-index: 3;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.choice-panel__sweep--right {
+  background: radial-gradient(ellipse at 70% 80%, rgba(56,189,248,0.12) 0%, transparent 70%);
+}
+
+.choice-panel:hover .choice-panel__sweep {
+  opacity: 1;
+}
+
+/* ── Content ────────────────────────────────────── */
+.choice-panel__content {
+  position: relative;
+  z-index: 5;
+  padding: 40px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 420px;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.choice-panel__content--right {
+  align-items: flex-end;
+  text-align: right;
+  margin-left: auto;
+}
+
+.choice-panel:hover .choice-panel__content {
+  transform: translateY(-8px);
+}
+
+.choice-panel__tag {
+  font-family: 'Courier New', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: rgba(108,99,255,0.7);
+}
+
+.choice-panel--right .choice-panel__tag {
+  color: rgba(56,189,248,0.7);
+}
+
+.choice-panel__title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin: 0;
+  line-height: 1;
+  text-shadow: 0 0 60px rgba(108,99,255,0.3);
+  transition: text-shadow 0.4s ease;
+}
+
+.choice-panel--right .choice-panel__title {
+  text-shadow: 0 0 60px rgba(56,189,248,0.3);
+}
+
+.choice-panel:hover .choice-panel__title {
+  text-shadow: 0 0 80px rgba(108,99,255,0.6);
+}
+
+.choice-panel--right:hover .choice-panel__title {
+  text-shadow: 0 0 80px rgba(56,189,248,0.6);
+}
+
+.choice-panel__sub {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.6;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ── ENTER CTA ──────────────────────────────────── */
+.choice-panel__cta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 12px 24px 12px 20px;
+  border: 1px solid rgba(108,99,255,0.35);
+  border-radius: 999px;
+  color: #6c63ff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  background: rgba(108,99,255,0.04);
+  cursor: pointer;
+}
+
+.choice-panel--right .choice-panel__cta {
+  border-color: rgba(56,189,248,0.35);
+  color: #38bdf8;
+  background: rgba(56,189,248,0.04);
+}
+
+.choice-panel:hover .choice-panel__cta {
+  background: rgba(108,99,255,0.15);
+  border-color: rgba(108,99,255,0.7);
+  box-shadow: 0 0 30px rgba(108,99,255,0.25);
+  transform: scale(1.04);
+}
+
+.choice-panel--right:hover .choice-panel__cta {
+  background: rgba(56,189,248,0.15);
+  border-color: rgba(56,189,248,0.7);
+  box-shadow: 0 0 30px rgba(56,189,248,0.25);
+}
+
+.choice-panel__cta svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+}
+
+.choice-panel:hover .choice-panel__cta svg {
+  transform: translateX(4px);
+}
+
+.choice-panel__cta-text {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* ── Centre divider ─────────────────────────────── */
+.choice-divider {
+  position: relative;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 2px;
+  flex-shrink: 0;
+  transition: opacity 0.4s ease;
+}
+
+.choice-panels--picked-projects .choice-divider,
+.choice-panels--picked-profile .choice-divider {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.choice-divider__line {
+  flex: 1;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.08));
+}
+
+.choice-divider__line:last-child {
+  background: linear-gradient(to top, transparent, rgba(255,255,255,0.08));
+}
+
+.choice-divider__orb {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.3);
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  animation: orb-pulse 3s ease-in-out infinite;
+}
+
+@keyframes orb-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(108,99,255,0); }
+  50%       { box-shadow: 0 0 0 6px rgba(108,99,255,0.12); }
+}
+
+/* ── Ticker ─────────────────────────────────────── */
+.choice-screen__ticker {
+  position: relative;
+  z-index: 10;
+  padding: 12px 0;
+  overflow: hidden;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  animation: cs-slide-up 0.8s 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cs-slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.choice-screen__ticker-inner {
+  display: flex;
+  white-space: nowrap;
+  animation: ticker-scroll 18s linear infinite;
+}
+
+.choice-screen__ticker-inner span {
+  font-family: 'Courier New', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.1);
+  text-transform: uppercase;
+}
+
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── Responsive ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .choice-panels {
+    flex-direction: column;
+  }
+
+  .choice-divider {
+    width: 100%;
+    height: 2px;
+    flex-direction: row;
+  }
+
+  .choice-divider__line {
+    flex: 1;
+    height: 1px;
+    width: auto;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.08));
+  }
+
+  .choice-divider__line:last-child {
+    background: linear-gradient(to left, transparent, rgba(255,255,255,0.08));
+  }
+
+  .choice-panel--expand {
+    flex: 20 !important;
+  }
+
+  .choice-screen__header {
+    padding: 20px 24px;
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .choice-screen__header-line { display: none; }
+
+  .choice-panel__content,
+  .choice-panel__content--right {
+    padding: 24px;
+    align-items: flex-start;
+    text-align: left;
+  }
+}

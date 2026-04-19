@@ -37,7 +37,7 @@ const socialLinks = [
   },
   {
     name: 'Instagram',
-    handle: '@aniket.verma',
+    handle: '@tanoshi_harsh',
     href: profile.socials.instagram,
     icon: FaInstagram,
     color: '#e1306c',
